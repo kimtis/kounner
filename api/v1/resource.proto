@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package kounner.api.v1;
+
+option go_package = "kounner/api/v1";
+
+import "google/protobuf/timestamp.proto";
+
+// Operation type for the resource
+enum Operation {
+  UNKNOWN = 0;
+  UPSERT = 1; // Create or Update
+  DELETE = 2;
+}
+
+// Kubernetes resource object
+message KubernetesResource {
+  string cluster_id = 1;        // Cluster identifier (for multi-cluster differentiation)
+  string group_version = 2;     // e.g., "apps/v1", "v1"
+  string kind = 3;              // e.g., "Pod", "Deployment", "CustomResourceDefinition"
+  string namespace = 4;
+  string name = 5;
+  string uid = 6;               // K8s Object UID (for accurate identification)
+  
+  Operation operation = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  
+  // Actual resource data (JSON or YAML serialized bytes)
+  // Using bytes for generality to allow direct dumping from the agent
+  bytes payload = 9;
+}
+
+// Stream response message
+message StreamResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Resource collection service
+service ResourceCollector {
+  // Bi-directional streaming for continuous data transfer from Agent to Server
+  rpc StreamResources(stream KubernetesResource) returns (StreamResponse);
+}

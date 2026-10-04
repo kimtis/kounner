@@ -1,0 +1,17 @@
+# Binaries
+bin/
+*.exe
+*.test
+*.out
+
+# Go modules
+vendor/
+
+# IDE/Editor settings
+.idea/
+.vscode/
+.pi/
+
+# OS specific
+.DS_Store
+Thumbs.db
