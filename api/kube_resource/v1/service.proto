@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package kounner.api.v1;
+
+option go_package = "github.com/kimtis/kounner/api/kube_resource/v1;kube_resourcev1";
+
+import "api/kube_resource/v1/type.proto";
+
+// KubeResourceService handles resource event collection from agents.
+service KubeResourceService {
+  // BatchUpsertResourceEvents receives a batch of resource events from an agent.
+  rpc BatchUpsertResourceEvents(BatchUpsertResourceEventsRequest) returns (BatchUpsertResourceEventsResponse);
+}
+
+// BatchUpsertResourceEventsRequest represents a batch of resource events sent by an agent.
+message BatchUpsertResourceEventsRequest {
+  string cluster_id = 1;
+  repeated KubeResourceEvent events = 2;
+}
+
+// BatchUpsertResourceEventsResponse represents the server's response to a batch upsert.
+message BatchUpsertResourceEventsResponse {
+  int32 processed_count = 1;
+  string message = 2;
+}

@@ -10,6 +10,6 @@
 - **Generation:** Always regenerate Go code after modifying `.proto` files using the standard command. Never commit generated code that diverges from the schema.
 
 ## Service & Communication Design
-- **Separation of Concerns:** Separate core data/domain schemas (`resource.proto`) from RPC service interface definitions (`collector.proto`).
+- **Separation of Concerns:** Separate core data/domain schemas (`type.proto`) from RPC service interface definitions (`service.proto`).
 - **Unary RPC over Streaming:** Use gRPC Unary RPC (with HTTP/2 multiplexing) instead of bidirectional streaming. This efficiently handles ~200 agents with highly skewed traffic (avoiding idle connection/timeout issues and simplifying load balancing).
 - **Batching & Idempotency:** Agent-to-server event ingestion must use batch operations (e.g., `BatchUpsertResourceEvents`) with `UPSERT` semantics. Due to idempotency, full-batch retries are safe and preferred upon failure.

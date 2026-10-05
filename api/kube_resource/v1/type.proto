@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package kounner.api.v1;
+
+option go_package = "github.com/kimtis/kounner/api/kube_resource/v1;kube_resourcev1";
+
+import "google/protobuf/timestamp.proto";
+
+// KubernetesResource represents the state of a Kubernetes object
+message KubeResource {
+  KubeResourceID id = 1;              // Composite key for identification
+  KubeResourceOwner owner = 2;        // Owner information for hierarchical tracking
+  map<string, string> labels = 3; // Labels for filtering and selection
+  string reason = 4;              // Reason for events
+
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+
+  bytes payload = 7;              // JSON representation of the Kubernetes object
+}
+
+// ResourceID represents the unique composite key for a resource
+message KubeResourceID {
+  string cluster_id = 1;
+  string group_version = 2;
+  string kind = 3;
+  string namespace = 4;
+  string name = 5;
+}
+
+// ResourceOwner represents the owner of a Kubernetes resource
+message KubeResourceOwner {
+  string kind = 1;
+  string name = 2;
+}
+
+// Operation type for the resource change event
+enum Operation {
+  UNKNOWN = 0;
+  UPSERT = 1; // Create or Update
+  DELETE = 2;
+}
+
+// ResourceEvent wraps a resource with an operation type
+message KubeResourceEvent {
+  Operation operation = 1;
+  KubeResourceID id = 2;              // Target resource ID
+  KubeResource resource = 3;// Full resource state (optional for DELETE)
+  google.protobuf.Timestamp timestamp = 4;
+}
