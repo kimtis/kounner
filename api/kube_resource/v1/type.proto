@@ -8,8 +8,8 @@ import "google/protobuf/timestamp.proto";
 
 // KubernetesResource represents the state of a Kubernetes object
 message KubeResource {
-  KubeResourceID id = 1;              // Composite key for identification
-  KubeResourceOwner owner = 2;        // Owner information for hierarchical tracking
+  KubeResourceID id = 1;          // Composite key for identification
+  KubeResourceOwner owner = 2;    // Owner information for hierarchical tracking
   map<string, string> labels = 3; // Labels for filtering and selection
   string reason = 4;              // Reason for events
 
@@ -44,7 +44,7 @@ enum Operation {
 // ResourceEvent wraps a resource with an operation type
 message KubeResourceEvent {
   Operation operation = 1;
-  KubeResourceID id = 2;              // Target resource ID
-  KubeResource resource = 3;// Full resource state (optional for DELETE)
+  KubeResourceID id = 2;          // Target resource ID
+  KubeResource resource = 3;      // Full resource state (optional for DELETE)
   google.protobuf.Timestamp timestamp = 4;
 }
